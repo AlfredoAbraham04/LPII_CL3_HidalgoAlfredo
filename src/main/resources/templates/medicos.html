@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Medicos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Lista de Medicos</h1>
+
+    <div class="mb-3">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarMedico">Agregar Medico</button>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>DNI</th>
+            <th>Estado Civil</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="medico : ${medicos}">
+            <td th:text="${medico.idMedicoCL3}"></td>
+            <td th:text="${medico.nombreCL3}"></td>
+            <td th:text="${medico.apellidoCL3}"></td>
+            <td th:text="${medico.email}"></td>
+            <td th:text="${medico.dniCL3}"></td>
+            <td th:text="${medico.estadoCivilCL3}"></td>
+            <td th:text="${#dates.format(medico.fechaNacimCL3, 'dd/MM/yyyy')}"></td>
+            <td>
+                <button class="btn btn-warning"
+                        th:data-id="${medico.idMedicoCL3}"
+                        th:data-nombre="${medico.nombreCL3}"
+                        th:data-apellido="${medico.apellidoCL3}"
+                        th:data-email="${medico.email}"
+                        th:data-dni="${medico.dniCL3}"
+                        th:data-estadocivil="${medico.estadoCivilCL3}"
+                        th:data-fechanacim="${#dates.format(medico.fechaNacimCL3, 'yyyy-MM-dd')}"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalEditarMedico">Editar</button>
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalConfirmarEliminar"
+                        th:data-id="${medico.idMedicoCL3}">Eliminar</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- modal agregar medico -->
+<div class="modal fade" id="modalAgregarMedico" tabindex="-1" aria-labelledby="modalAgregarMedicoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAgregarMedicoLabel">Agregar Medico</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/medicos/guardar}" method="post">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombreCL3" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="apellido" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="apellido" name="apellidoCL3" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dni" class="form-label">DNI</label>
+                        <input type="text" class="form-control" id="dni" name="dniCL3" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="estadoCivil" class="form-label">Estado Civil</label>
+                        <select class="form-select" id="estadoCivil" name="estadoCivilCL3" required>
+                            <option value="" selected disabled>Seleccione...</option>
+                            <option value="Soltero">Soltero</option>
+                            <option value="Casado">Casado</option>
+                            <option value="Divorciado">Divorciado</option>
+                            <option value="Viudo">Viudo</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fechaNacim" class="form-label">Fecha de Nacimiento</label>
+                        <input type="date" class="form-control" id="fechaNacim" name="fechaNacimCL3" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal editar medico -->
+<div class="modal fade" id="modalEditarMedico" tabindex="-1" aria-labelledby="modalEditarMedicoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarMedicoLabel">Editar Médico</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/medicos/guardar}" method="post">
+                    <input type="hidden" id="idMedico" name="idMedicoCL3">
+                    <div class="mb-3">
+                        <label for="nombreEdit" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombreEdit" name="nombreCL3" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="apellidoEdit" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="apellidoEdit" name="apellidoCL3" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emailEdit" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="emailEdit" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dniEdit" class="form-label">DNI</label>
+                        <input type="text" class="form-control" id="dniEdit" name="dniCL3" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="estadoCivilEdit" class="form-label">Estado Civil</label>
+                        <select class="form-select" id="estadoCivilEdit" name="estadoCivilCL3" required>
+                            <option value="" selected disabled>Seleccione...</option>
+                            <option value="Soltero">Soltero</option>
+                            <option value="Casado">Casado</option>
+                            <option value="Divorciado">Divorciado</option>
+                            <option value="Viudo">Viudo</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fechaNacimEdit" class="form-label">Fecha de Nacimiento</label>
+                        <input type="date" class="form-control" id="fechaNacimEdit" name="fechaNacimCL3" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal confirmar eliminacion -->
+<div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" aria-labelledby="modalConfirmarEliminarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalConfirmarEliminarLabel">Confirmar Eliminacion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Eliminar este medico?</p>
+            </div>
+            <div class="modal-footer">
+                <form th:action="@{/medicos/eliminar/{id}(id=${idMedicoEliminar})}" method="post" id="formEliminar">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const editarMedicoButtons = document.querySelectorAll('[data-bs-target="#modalEditarMedico"]');
+    editarMedicoButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const nombre = this.getAttribute('data-nombre');
+            const apellido = this.getAttribute('data-apellido');
+            const email = this.getAttribute('data-email');
+            const dni = this.getAttribute('data-dni');
+            const estadoCivil = this.getAttribute('data-estadocivil');
+            const fechaNacim = this.getAttribute('data-fechanacim');
+
+            document.getElementById('idMedico').value = id;
+            document.getElementById('nombreEdit').value = nombre;
+            document.getElementById('apellidoEdit').value = apellido;
+            document.getElementById('emailEdit').value = email;
+            document.getElementById('dniEdit').value = dni;
+            document.getElementById('estadoCivilEdit').value = estadoCivil;
+            document.getElementById('fechaNacimEdit').value = fechaNacim;
+        });
+    });
+
+    const eliminarMedicoButtons = document.querySelectorAll('[data-bs-target="#modalConfirmarEliminar"]');
+    eliminarMedicoButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            document.getElementById('formEliminar').action = `/medicos/eliminar/${id}`;
+        });
+    });
+</script>
+</body>
+</html>
